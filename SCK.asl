@@ -21,6 +21,7 @@ startup
 	settings.Add("openBoiler",false,"Open Boiler Room");
 	settings.Add("escapeBoiler",false,"Escape Boiler Room");
 	settings.Add("watchTape",true,"Watch Blackmail Tape");
+}
 
 start
 {
