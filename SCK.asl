@@ -15,12 +15,14 @@ startup
 	settings.Add("openLibrary",true,"Open Library");
 	settings.Add("meetConnie",false,"Meet Connie");
 	settings.Add("meetHal",false,"Meet Hal");
+	settings.Add("connie2",false,"2nd Connie Convo");
 	settings.Add("teachersLounge",true,"Break Into Teacher's Lounge");
 	settings.Add("meetDaryl",false,"Meet Daryl");
 	settings.Add("getBoilerNote",false,"Get Boiler Note");
 	settings.Add("openBoiler",false,"Open Boiler Room");
 	settings.Add("escapeBoiler",false,"Escape Boiler Room");
 	settings.Add("watchTape",true,"Watch Blackmail Tape");
+	settings.Add("daryl2",true,"3rd Daryl Convo/Confession");
 }
 
 start
@@ -29,18 +31,20 @@ start
 	{
 		vars.openSafe = !settings["openSafe"];
 		vars.openLocker = !settings["openLocker"];
-		vars.readPaper = !settings["readPaper"];
 		vars.meetHulk = !settings["meetHulk"];
-		vars.judoPoster = !settings["judoPoster"];
 		vars.openLibrary = !settings["openLibrary"];
 		vars.meetConnie = !settings["meetConnie"];
 		vars.meetHal = !settings["meetHal"];
+		vars.connie2 = !settings["connie2"];
 		vars.teachersLounge = !settings["teachersLounge"];
 		vars.meetDaryl = !settings["meetDaryl"];
 		vars.getBoilerNote = !settings["getBoilerNote"];
 		vars.openBoiler = !settings["openBoiler"];
 		vars.escapeBoiler = !settings["escapeBoiler"];
 		vars.watchTape = !settings["watchTape"];
+		vars.daryl2 = !settings["daryl2"];
+		vars.daryl = 0;
+		vars.connie = 0;
 		return true;
 	}
 }
@@ -70,7 +74,9 @@ split
 			if (!vars.openLibrary) { vars.openLibrary = true; return true; }
 			break;
 		case "SU1C":
-			if (!vars.meetConnie) { vars.meetConnie = true; return true; }
+			if (old.scene != "SU1C") { vars.connie++; }
+			if (!vars.meetConnie && vars.connie == 1) { vars.meetConnie = true; return true; }
+			if (!vars.connie2 && vars.connie == 2) { vars.connie2 = true; return true; }
 			break;
 		case "Sd1h":
 			if (!vars.meetHal) { vars.meetHal = true; return true; }
@@ -79,7 +85,9 @@ split
 			if (!vars.teachersLounge) { vars.teachersLounge = true; return true; }
 			break;
 		case "dd1d":
-			if (!vars.meetDaryl) { vars.meetDaryl = true; return true; }
+			if (old.scene != "dd1d") { vars.daryl++; }
+			if (!vars.meetDaryl && vars.daryl == 1) { vars.meetDaryl = true; return true; }
+			if (!vars.daryl2 && vars.daryl == 3) { vars.daryl2 = true; return true; }
 			break;
 		case "dd1e":
 			if (!vars.getBoilerNote) { vars.getBoilerNote = true; return true; }
