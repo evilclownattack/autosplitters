@@ -1,4 +1,4 @@
-// WIP by evilclownattack
+// (1.0) by evilclownattack
 // Report bugs/request settings to me on Discord
 // evilclownattack#9843
 
