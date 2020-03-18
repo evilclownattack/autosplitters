@@ -5,6 +5,7 @@
 state("Game")
 {
 	string6 scene : 0xD0AFC;
+	uint sceneval : 0xD2114;
 }
 
 startup
@@ -12,17 +13,25 @@ startup
 	settings.Add("openSafe",false,"Open Eloise Safe");
 	settings.Add("openLocker",false,"Open Jake's Locker");
 	settings.Add("meetHulk",false,"Meet Hulk");
+	settings.Add("doneHulk",false,"Ask Hulk about the robbery");
 	settings.Add("openLibrary",true,"Open Library");
 	settings.Add("meetConnie",false,"Meet Connie");
 	settings.Add("meetHal",false,"Meet Hal");
+	settings.Add("halConnie",false,"Ask Hal about Connie");
 	settings.Add("connie2",false,"2nd Connie Convo");
 	settings.Add("teachersLounge",true,"Break Into Teacher's Lounge");
+	settings.Add("essay",false,"Look at Hal's essay");
 	settings.Add("meetDaryl",false,"Meet Daryl");
 	settings.Add("getBoilerNote",false,"Get Boiler Note");
 	settings.Add("openBoiler",false,"Open Boiler Room");
+	settings.Add("enterBoiler",false,"Enter the boiler room");
 	settings.Add("escapeBoiler",false,"Escape Boiler Room");
 	settings.Add("watchTape",true,"Watch Blackmail Tape");
+	settings.Add("halTape",false,"See Hal on the blackmail tape");
+	settings.Add("accuseConnie",false,"Connie says \"I didn't kill Jake\"");
 	settings.Add("daryl2",true,"3rd Daryl Convo/Confession");
+	settings.Add("darylMitch",false,"Daryl agrees to help you get Mitch");
+	settings.Add("connieMitch",false,"Connie says she won't help get Mitch");
 }
 
 start
@@ -32,17 +41,25 @@ start
 		vars.openSafe = !settings["openSafe"];
 		vars.openLocker = !settings["openLocker"];
 		vars.meetHulk = !settings["meetHulk"];
+		vars.doneHulk = !settings["doneHulk"];
 		vars.openLibrary = !settings["openLibrary"];
 		vars.meetConnie = !settings["meetConnie"];
 		vars.meetHal = !settings["meetHal"];
+		vars.halConnie = !settings["halConnie"];
 		vars.connie2 = !settings["connie2"];
 		vars.teachersLounge = !settings["teachersLounge"];
+		vars.essay = !settings["essay"];
 		vars.meetDaryl = !settings["meetDaryl"];
 		vars.getBoilerNote = !settings["getBoilerNote"];
 		vars.openBoiler = !settings["openBoiler"];
+		vars.enterBoiler = !settings["enterBoiler"];
 		vars.escapeBoiler = !settings["escapeBoiler"];
 		vars.watchTape = !settings["watchTape"];
+		vars.halTape = !settings["halTape"];
+		vars.accuseConnie = !settings["accuseConnie"];
 		vars.daryl2 = !settings["daryl2"];
+		vars.darylMitch = !settings["darylMitch"];
+		vars.connieMitch = !settings["connieMitch"];
 		vars.daryl = 0;
 		vars.connie = 0;
 		return true;
@@ -102,4 +119,34 @@ split
 			if (!vars.watchTape) { vars.watchTape = true; return true; }
 			break;
 	}
+
+	uint t = current.sceneval;
+  switch (t) {
+		case 2070: // End Letter
+			return true;
+		case 243: // I *clap* Didn't *clap* Kill *clap* Jake
+			if (!vars.accuseConnie) {vars.accuseConnie = true; return true;}
+			break;
+		case 250: // Connie refuses to get Mitch
+			if (!vars.connieMitch) {vars.connieMitch = true; return true;}
+			break;
+		case 343: // All I know about is football
+			if (!vars.doneHulk) {vars.doneHulk = true; return true;}
+			break;
+		case 437: // Asked Hal about Connie
+			if (!vars.halConnie) {vars.halConnie = true; return true;}
+			break;
+    case 653: // Hal on Tape
+			if (!vars.halTape) {vars.halTape = true; return true;}
+      break;
+		case 1607: // Look at Hal's essay
+			if (!vars.essay) {vars.essay = true; return true;}
+			break;
+		case 2077: // Enter the boiler room
+			if (!vars.enterBoiler) {vars.enterBoiler = true; return true;}
+			break;
+		case 3216: // Daryl agrees to help catch Mitch
+			if (!vars.darylMitch) {vars.darylMitch = true; return true;}
+			break;
+  }
 }
