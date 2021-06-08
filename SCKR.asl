@@ -1,16 +1,32 @@
-// (1.0 RC) by evilclownattack
+// (1.0 RCF1) by evilclownattack
 // Report bugs/request settings to me on Discord
 // evilclownattack#9843
 
-state("Secrets")
+state("Secrets", "Steam")
 {
-	string5 scene : 0x001887AC, 0x20, 0x14;
+	string5 scene : "Ndui.dll", 0x0008E75C, 0x20, 0x4C, 0x8, 0xC, 0x0;
 	double level : 0x001887B8, 0x20, 0x8, 0x4, 0x4, 0x4, 0x0, 0x18;
+}
+
+state("Secrets", "Disc")
+{
+	string5 scene : "Ndui.dll", 0x0008E75C, 0x10, 0x64, 0x8, 0xC, 0x0;
+	double level : 0x001887B8, 0x20, 0x8, 0x4, 0x4, 0x4, 0x0, 0x18;
+}
+
+init
+{
+	print(modules.First().ModuleMemorySize.ToString());
+	if (modules.First().ModuleMemorySize != 1937408) {
+		version = "Steam";
+	}
+	else {
+		version = "Disc";
+	}
 }
 
 startup
 {
-	refreshRate = 1500;
 	settings.Add("openSafe",false,"Open Safe");
 	settings.Add("beechCall",false,"Beech Phone Call");
 	settings.Add("openLocker",false,"Open Jake's Locker");
@@ -63,7 +79,7 @@ update
 
 start
 {
-	if (current.scene == "S6430")
+	if (current.scene == "s6430")
 	{
 		vars.openSafe = !settings["openSafe"];
 		vars.beechCall = !settings["beechCall"];
@@ -82,7 +98,18 @@ start
 		vars.solveElements = !settings["solveElements"];
 		vars.watchTape = !settings["watchTape"];
 		vars.meetBeech = !settings["meetBeech"];
+		vars.teachersComputer = !settings["teachersComputer"];
+		vars.hulk = 0;
 		return true;
+	}
+}
+
+reset
+{
+	if (old.scene != current.scene) {
+		if (current.scene == "s6461") {
+			return true;
+		}
 	}
 }
 
@@ -90,62 +117,64 @@ split
 {
 	string s = current.scene;
 	switch (s) {
-		case "S6431": //the end
+		case "s6431": //the end
 			if (!settings["awardsScreen"]) { return true; }
 			break;
-		case "poopy": //100 end
+		case "s6400": //100 end
 			if (settings["awardsScreen"]) { return true; }
 			break;
-		case "S4106": //open safe
+		case "s4106": //open safe
 			if (!vars.openSafe) { vars.openSafe = true; return true; }
 			break;
-		case "S4102": //beech call X
+		case "s4102": //beech call X
 			if (!vars.beechCall) { vars.beechCall = true; return true; }
 			break;
-		case "S3011": //open locker
+		case "s3011": //open locker
 			if (!vars.openLocker) { vars.openLocker = true; return true; }
 			break;
-		case "S1300": //meet Hulk X
-			if (!vars.meetHulk) { vars.meetHulk = true; return true; }
+		case "s1300": //meet Hulk X
+			if (old.scene != "s1300") { vars.hulk++; }
+			if (!vars.meetHulk && vars.hulk == 1) { vars.meetHulk = true; return true; }
+			if (!vars.hulkAgain && vars.hulk == 2) { vars.hulkAgain = true; return true; }
 			break;
-		case "S3210": //enter library
+		case "s3210": //enter library
 			if (!vars.enterLibrary) { vars.enterLibrary = true; return true; }
 			break;
-		case "S3370": //use computer
+		case "s3370": //use computer
 			if (!vars.useComputer) { vars.useComputer = true; return true; }
 			break;
-		case "S1201": //meet Connie X
+		case "s1201": //meet Connie X
 			if (!vars.meetConnie) { vars.meetConnie = true; return true; }
 			break;
-		case "S5610": //teacher's lounge
+		case "s5610": //teacher's lounge
 			if (!vars.teachersLounge) { vars.teachersLounge = true; return true; }
 			break;
-		case "S1400": //meet Hal
+		case "s1400": //meet Hal
 			if (!vars.meetHal) { vars.meetHal = true; return true; }
 			break;
-		case "S3023": //Hulk again
-			if (!vars.hulkAgain) { vars.hulkAgain = true; return true; }
-			break;
-		case "S1100": //meet Daryl
+		case "s1100": //meet Daryl
 			if (!vars.meetDaryl) { vars.meetDaryl = true; return true; }
 			break;
-		case "S1194": //get note
+		case "s1194": //get note
 			if (!vars.getNote) { vars.getNote = true; return true; }
 			break;
-		case "S2330": //enter boiler room
+		case "s2330": //enter boiler room
 			if (!vars.enterBoiler) { vars.enterBoiler = true; return true; }
 			break;
-		case "S2323": //exit boiler
+		case "s2323": //exit boiler
 			if (!vars.exitBoiler) { vars.exitBoiler = true; return true; }
 			break;
-		case "S3299": //solve elements
+		case "s3299": //solve elements
 			if (!vars.solveElements) { vars.solveElements = true; return true; }
 			break;
-		case "S4142": //watch tape
+		case "s4142": //watch tape
 			if (!vars.watchTape) { vars.watchTape = true; return true; }
 			break;
-		case "S1600": //Beech in house
+		case "s1600": //Beech in house
 			if (!vars.meetBeech) { vars.meetBeech = true; return true; }
+			break;
+		case "s5619": //teacher's computer
+			if (!vars.teachersComputer) { vars.teachersComputer = true; return true; }
 			break;
 	}
 	if (settings["barnacleBlast"]) {
