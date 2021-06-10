@@ -1,8 +1,8 @@
-// (1.0 RCF1) by evilclownattack
+// (1.0) by evilclownattack
 // Report bugs/request settings to me on Discord
 // evilclownattack#9843
 
-state("Secrets", "Steam")
+state("Secrets", "Steam/Digital")
 {
 	string5 scene : "Ndui.dll", 0x0008E75C, 0x20, 0x4C, 0x8, 0xC, 0x0;
 	double level : 0x001887B8, 0x20, 0x8, 0x4, 0x4, 0x4, 0x0, 0x18;
@@ -16,7 +16,6 @@ state("Secrets", "Disc")
 
 init
 {
-	print(modules.First().ModuleMemorySize.ToString());
 	if (modules.First().ModuleMemorySize != 1937408) {
 		version = "Steam";
 	}
@@ -68,13 +67,6 @@ startup
 	settings.Add("level18",false,"Level 18","barnacleBlast");
 	settings.Add("level19",false,"Level 19","barnacleBlast");
 	settings.Add("level20",false,"Level 20","barnacleBlast");
-}
-
-update
-{
-	if (current.scene != old.scene) {
-		print(current.scene);
-	}
 }
 
 start
