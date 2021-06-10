@@ -1,4 +1,4 @@
-// (1.0) by evilclownattack
+// (1.01) by evilclownattack
 // Report bugs/request settings to me on Discord
 // evilclownattack#9843
 
@@ -17,7 +17,7 @@ state("Secrets", "Disc")
 init
 {
 	if (modules.First().ModuleMemorySize != 1937408) {
-		version = "Steam";
+		version = "Steam/Digital";
 	}
 	else {
 		version = "Disc";
